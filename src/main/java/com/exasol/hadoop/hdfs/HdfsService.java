@@ -34,6 +34,7 @@ public class HdfsService {
             @Override
             public List<String> run() throws Exception {
                 Configuration conf = new Configuration();
+                conf.set("hadoop.rpc.protection", "privacy");
                 if (useKerberos) {
                     conf.set("dfs.namenode.kerberos.principal", hdfsUser);
                 }

@@ -17,7 +17,7 @@ public class HCatMetadataService {
             final String dbName,
             final String tableName,
             final String hCatAddress,
-            final String hCatUser,  // In case of Kerberos, this is the principle of the Hadoop HDFS namenode (value of dfs.namenode.kerberos.principal in hdfs-site.xml)
+            final String hCatUser,  // In case of Kerberos, this is the service principle typically of Hive
             final boolean useKerberos,
             final KerberosCredentials kerberosCredentials) throws Exception {
         
@@ -28,7 +28,7 @@ public class HCatMetadataService {
                 HCatTableMetadata tableMeta;
                 if (hCatAddress.toLowerCase().startsWith("thrift://")) {
                     // Get table metadata via faster native Hive Metastore API
-                    tableMeta = HiveMetastoreService.getTableMetadata(hCatAddress, dbName, tableName, useKerberos, hCatUser.replaceAll("hdfs", "hive"));
+                    tableMeta = HiveMetastoreService.getTableMetadata(hCatAddress, dbName, tableName, useKerberos, hCatUser);
                 } else {
                     // Get table metadata from webHCat
                     String responseJson = WebHdfsAndHCatService.getExtendedTableInfo(hCatAddress, dbName, tableName, useKerberos?kerberosCredentials.getPrinciple():hCatUser);

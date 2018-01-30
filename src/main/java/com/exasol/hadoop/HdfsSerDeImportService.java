@@ -91,7 +91,11 @@ public class HdfsSerDeImportService {
                     }
                     FileSystem fs = HdfsService.getFileSystem(hdfsUrls,conf);
                     for (String file : files) {
-                        fs = importFile(fs, file, partitionColumns, inputFormat, serDe, serDeParameters, hdfsUrls, hdfsUser, columns, outputColumns, useKerberos, ctx);
+                        try {
+                            fs = importFile(fs, file, partitionColumns, inputFormat, serDe, serDeParameters, hdfsUrls, hdfsUser, columns, outputColumns, useKerberos, ctx);
+                        } catch (Exception ex) {
+                            System.out.println("ERROR: Catched exception for file " + file + ": " + UdfUtils.traceToString(ex));
+                        }
                     }
                     return null;
                 }
